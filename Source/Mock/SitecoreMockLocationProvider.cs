@@ -1,8 +1,15 @@
-﻿using System;
+﻿#region Usings
+
+using System;
 using System.Collections.Specialized;
+using JetBrains.Annotations;
+using GeoIpFallback.Mock;
 using Sitecore.Analytics;
-using Sitecore.Analytics.Model;
+using Sitecore.CES.GeoIp.Core.Model;
 using Sitecore.Configuration;
+using Sitecore.Data.Fields;
+
+#endregion
 
 namespace GeoIpFallback.Mock
 {
@@ -12,17 +19,19 @@ namespace GeoIpFallback.Mock
         private const string LocationCustomValuesKey = "GeoIpFallback.Mocks.CurrentLocation";
 
         private string _database;
+
         public override void Initialize(string name, NameValueCollection config)
         {
             string database = config["database"];
             if (!string.IsNullOrEmpty(database))
             {
-                this._database = database;
+                _database = database;
             }
             else
             {
-                this._database = "master";
+                _database = "master";
             }
+
             base.Initialize(name, config);
         }
 
@@ -37,10 +46,7 @@ namespace GeoIpFallback.Mock
 
                 return DateTime.MinValue;
             }
-            set
-            {
-                Tracker.Current.Session.Interaction.CustomValues.Add(LastModifiedCustomValuesKey, value);
-            }
+            set => Tracker.Current.Session.Interaction.CustomValues.Add(LastModifiedCustomValuesKey, value);
         }
 
         private WhoIsInformation CurrentLocation
@@ -54,10 +60,7 @@ namespace GeoIpFallback.Mock
 
                 return null;
             }
-            set
-            {
-                Tracker.Current.Session.Interaction.CustomValues.Add(LocationCustomValuesKey, value);
-            }
+            set { Tracker.Current.Session.Interaction.CustomValues.Add(LocationCustomValuesKey, value); }
         }
 
         public override WhoIsInformation GetMockCurrentLocation()
@@ -72,7 +75,7 @@ namespace GeoIpFallback.Mock
 
             if (!string.IsNullOrWhiteSpace(managerPath))
             {
-                var manager = Sitecore.Configuration.Factory.GetDatabase(_database).GetItem(managerPath);
+                var manager = Factory.GetDatabase(_database).GetItem(managerPath);
 
                 if (manager != null)
                 {
@@ -88,14 +91,18 @@ namespace GeoIpFallback.Mock
                         Tracker.Current.Session.Interaction.CustomValues.Remove(LastModifiedCustomValuesKey);
                     }
 
-                    Sitecore.Data.Fields.ReferenceField currentLocation = manager.Fields[Constants.CurrentLocationFieldName];
+                    ReferenceField currentLocation = manager.Fields[Constants.CurrentLocationFieldName];
                     if (currentLocation != null && currentLocation.TargetItem != null)
                     {
                         result.Country = currentLocation.TargetItem[Constants.CountryFieldName];
                         result.City = currentLocation.TargetItem[Constants.CityFieldName];
                         result.PostalCode = currentLocation.TargetItem[Constants.PostalCodeFieldName];
-                        result.Longitude = currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].HasValue ? double.Parse(currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].Value) : (double?)null;
-                        result.Latitude = currentLocation.TargetItem.Fields[Constants.LatitudeFieldName].HasValue ? double.Parse(currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].Value) : (double?)null;
+                        result.Longitude = currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].HasValue
+                            ? double.Parse(currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].Value)
+                            : (double?)null;
+                        result.Latitude = currentLocation.TargetItem.Fields[Constants.LatitudeFieldName].HasValue
+                            ? double.Parse(currentLocation.TargetItem.Fields[Constants.LongitudeFieldName].Value)
+                            : (double?)null;
                         result.AreaCode = currentLocation.TargetItem[Constants.AreaCodeFieldName];
                         result.BusinessName = currentLocation.TargetItem[Constants.BusinessNameFieldName];
                         result.Dns = currentLocation.TargetItem[Constants.DnsFieldName];

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GeoIpFallback
+﻿namespace GeoIpFallback
 {
-    public class Constants
+    public static class Constants
     {
         //GepIP Fallback Manager
         public const string CurrentLocationFieldName = "CurrentLocation";
