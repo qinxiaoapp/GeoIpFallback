@@ -126,7 +126,6 @@
   <ItemGroup>
     <None Include="App_Config\Modules\GeoIpFallback\GeoIpFallback.Core.config" />
     <None Include="App_Data\GeoLite2-City.mmdb" />
-    <None Include="App_Data\GeoLiteCity.dat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
