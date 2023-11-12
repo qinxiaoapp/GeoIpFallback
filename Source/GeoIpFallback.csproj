@@ -124,7 +124,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="App_Config\Include\GeoIpFallback\GeoIpFallback.Core.config" />
+    <None Include="App_Config\Modules\GeoIpFallback\GeoIpFallback.Core.config" />
     <None Include="App_Data\GeoLite2-City.mmdb" />
     <None Include="App_Data\GeoLiteCity.dat" />
   </ItemGroup>
