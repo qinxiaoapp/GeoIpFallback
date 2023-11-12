@@ -21,7 +21,7 @@ namespace GeoIpFallback.Providers
         public override void Initialize(string name, NameValueCollection config)
         {
             string databasePath = config["database"];
-            _databasePath = !string.IsNullOrEmpty(databasePath) ? databasePath : "~/app_data/GeoLite2-City.mmdb";
+            _databasePath = !string.IsNullOrEmpty(databasePath) ? databasePath : "~/app_data/GeoIpFallback/GeoLite2-City.mmdb";
 
             base.Initialize(name, config);
         }
